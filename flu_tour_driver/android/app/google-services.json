@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "1032687895242",
+    "firebase_url": "https://flutour-dev-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "flutour-dev",
+    "storage_bucket": "flutour-dev.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1032687895242:android:aa805c8928853d8eabaa33",
+        "android_client_info": {
+          "package_name": "com.flutour.driver"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1032687895242-aptr9v1dpbk3leibdfo8fo8cous766ga.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQQW7o6djL2SHOYAbbYLOOVSoc3dKi17U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1032687895242-aptr9v1dpbk3leibdfo8fo8cous766ga.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1032687895242:android:528226c645fff8e3abaa33",
+        "android_client_info": {
+          "package_name": "com.flutour.passenger"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1032687895242-aptr9v1dpbk3leibdfo8fo8cous766ga.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQQW7o6djL2SHOYAbbYLOOVSoc3dKi17U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1032687895242-aptr9v1dpbk3leibdfo8fo8cous766ga.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
