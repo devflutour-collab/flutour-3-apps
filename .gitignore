@@ -1,0 +1,25 @@
+# macOS
+.DS_Store
+
+# Flutter SDK internals (not app code)
+bin/
+dev/
+examples/
+packages/
+flutter_root.iml
+
+# IDE
+.idea/
+
+# Python report generators
+generate_*.py
+
+# PDF reports & invoices
+*.pdf
+
+# Misc project files
+flutour_screens/
+16.7.2026/
+
+# Firebase CLI cache (firebase.json at root is intentionally committed)
+.firebase/

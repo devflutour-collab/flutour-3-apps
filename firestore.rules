@@ -1,0 +1,93 @@
+// Firestore Security Rules — FluTour
+// TODO: Deploy to all 3 Firebase projects when Google account is recovered
+// Deploy command: firebase deploy --only firestore:rules
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Helper functions ────────────────────────────────────────────────────
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return request.auth.uid == uid;
+    }
+
+    function isAdmin() {
+      return isSignedIn() &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role
+          in ['admin', 'super-admin'];
+    }
+
+    function isApprovedDriver() {
+      return isSignedIn() &&
+        get(/databases/$(database)/documents/drivers/$(request.auth.uid)).data.status == 'approved';
+    }
+
+    // ── users collection ────────────────────────────────────────────────────
+    // Profile: {name, phone, role:'passenger', createdAt, totalRides}
+    match /users/{uid} {
+      // Passenger can read/write their own profile
+      allow read, write: if isOwner(uid);
+      // Admin can read all user profiles
+      allow read: if isAdmin();
+      // Only allow role field to be set to 'passenger' on create (not admin)
+      allow create: if isOwner(uid) && request.resource.data.role == 'passenger';
+    }
+
+    // ── drivers collection ──────────────────────────────────────────────────
+    // Profile: {name, phone, vehicleId, vehicleType, status:'pending'|'approved'|'rejected',
+    //           rating, totalTrips, earnings, createdAt}
+    match /drivers/{uid} {
+      // Any signed-in user (passenger) can read driver profiles for vehicle selection
+      allow read: if isSignedIn();
+      // Driver can update their own profile (except status and role)
+      allow update: if isOwner(uid) &&
+        !('status' in request.resource.data.diff(resource.data).affectedKeys()) &&
+        !('role' in request.resource.data.diff(resource.data).affectedKeys());
+      // Driver can create their own profile with status = 'pending'
+      allow create: if isOwner(uid) && request.resource.data.status == 'pending';
+      // Only admin can approve/reject drivers
+      allow write: if isAdmin();
+    }
+
+    // ── trips collection ────────────────────────────────────────────────────
+    // Trip: {passengerId, driverId, status, pickup, dropoff, fare, createdAt, ...}
+    match /trips/{tripId} {
+      // Passenger can read their own trips
+      allow read: if isSignedIn() && resource.data.passengerId == request.auth.uid;
+      // Approved driver can read all pending trip requests (driverId not yet assigned)
+      allow read: if isApprovedDriver() && resource.data.status == 'requested';
+      // Approved driver can read trips assigned to them
+      allow read: if isApprovedDriver() && resource.data.driverId == request.auth.uid;
+      // Passenger can create a trip
+      allow create: if isSignedIn() && request.resource.data.passengerId == request.auth.uid;
+      // Driver can accept an unassigned trip (sets driverId + status → accepted)
+      allow update: if isApprovedDriver() && resource.data.status == 'requested' && resource.data.driverId == '';
+      // Driver can update their own assigned trip (arrive, start, complete)
+      allow update: if isApprovedDriver() && resource.data.driverId == request.auth.uid;
+      // Admin can read/write all trips
+      allow read, write: if isAdmin();
+    }
+
+    // ── payments collection ─────────────────────────────────────────────────
+    // Payment: {tripId, passengerId, driverId, amount, method, status, createdAt}
+    match /payments/{paymentId} {
+      allow read: if isSignedIn() &&
+        (resource.data.passengerId == request.auth.uid ||
+         resource.data.driverId == request.auth.uid);
+      allow create: if isSignedIn() && request.resource.data.passengerId == request.auth.uid;
+      allow read, write: if isAdmin();
+    }
+
+    // ── notifications collection ────────────────────────────────────────────
+    // Notification: {userId, title, body, read, createdAt}
+    match /notifications/{notifId} {
+      allow read, write: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow write: if isAdmin();
+    }
+
+  }
+}
