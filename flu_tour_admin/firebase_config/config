@@ -1,0 +1,8 @@
+const firebaseConfig = {
+  apiKey: "AIzaSyBj3OCRQZ8-iBGze3g9_p7ugG33ku7QH8k",
+  authDomain: "flutour-dev.firebaseapp.com",
+  projectId: "flutour-dev",
+  storageBucket: "flutour-dev.firebasestorage.app",
+  messagingSenderId: "1032687895242",
+  appId: "1:1032687895242:web:6e458d6d15b8b41dabaa33"
+};
