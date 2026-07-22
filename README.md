@@ -9,7 +9,7 @@ A complete ride-hailing platform for Luxor's iconic tourist vehicles — Felucca
 
 | Folder | App | Description |
 |--------|-----|-------------|
-| `flutour-passenger/` | Passenger App | Book rides, track driver, rate trips |
+| `flu_tour_passenger/` | Passenger App | Book rides, track driver, rate trips |
 | `flu_tour_driver/` | Driver App | Accept trips, GPS broadcast, earnings |
 | `flu_tour_admin/` | Admin Panel | Driver approval, live map, trip dashboard |
 
